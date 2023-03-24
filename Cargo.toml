@@ -1,0 +1,20 @@
+[package]
+name = "JamiesMiscLibrary"
+version = "0.0.1"
+edition = "2021"
+
+license = "Unlicense"
+description = "A little library of miscellaneous thingamabobs for my personal use"
+readme = "README.md"
+
+[lib]
+name = "rary"
+path = "src/lib.rs"
+
+[[test]]
+name = "tests"
+path = "tests/integration_tests.rs"
+
+
+[dependencies]
+num-traits = "0.2.15"
