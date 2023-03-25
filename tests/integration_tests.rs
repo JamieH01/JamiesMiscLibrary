@@ -12,8 +12,8 @@ use jml::*;
 
     #[test]
     fn test_array2d() {
-        let table1 = Array2d::<u32>::new(500, 500, 15, false);
-        println!("{:?} {:?}", table1.has_lt(), table1.nth_to_pos(8879));
+        let mut table1 = Array2d::<u32>::new(500, 500, 15, false);
+        println!("{:?} {:?}", table1.has_lt(), table1.nth(8879));
 
         let table2 = Array2d::<u32>::new(500, 500, 15, true);
         println!("{:?}  {:?}", table2.has_lt(), table2.nth_to_pos(8879));
@@ -50,6 +50,10 @@ use jml::*;
     #[test]
     fn distance_test() {
         let distance = distance(15.0, 29.0, 243.0, 44.0);
+        let point_a = point!(15.0, 29.0);
+        let point_b = point!(243.0, 44.0);
+        let point_distance = point_a.distance(&point_b);
+        watch!(distance, point_distance);
     }
 
     #[test]
@@ -57,5 +61,11 @@ use jml::*;
         let vectorA = vec![2.0; 10];
         let vectorB = vec![3.0; 10];
         let product = dot_product_f64(vectorA, vectorB);
+    }
+
+    #[test]
+    fn try_it_test() {
+        let int:u32 = 15;
+        let usize_int:usize = try_it!(int);
     }
 }

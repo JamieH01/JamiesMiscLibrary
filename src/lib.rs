@@ -37,7 +37,9 @@
 }
 
 
-
+#[macro_export] macro_rules! try_it {
+    ($expr:expr) => {$expr.try_into().unwrap()}
+}
 
 
 
@@ -251,12 +253,12 @@ impl<T: Clone> Array2d<T> {
 
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Point2<T: num_traits::Num + Clone + Copy> {
+pub struct Point2<T:num_traits::Num +  Clone + Copy> {
     x:T,
     y:T,
 }
 
-impl<T: num_traits::Num + Clone + Copy> Point2<T> {
+impl<T:num_traits::Num +  Clone + Copy> Point2<T> where f64: From<T> {
     pub fn new(x:T, y:T) -> Self {
         Point2 {x, y}
     }
@@ -304,6 +306,16 @@ impl<T: num_traits::Num + Clone + Copy> Point2<T> {
         let new_y = self.y / divisor;
         Point2 {x:new_x, y:new_y}
     }
+
+
+    pub fn distance(&self, p2:&Self) -> f64 {
+    let x1:f64 = self.x.try_into().unwrap();
+    let y1:f64 = self.y.try_into().unwrap();
+    let x2:f64 = p2.x.try_into().unwrap();
+    let y2:f64 = p2.y.try_into().unwrap();
+
+    ( (x2-x1).powi(2) + (y2-y1).powi(2) ).sqrt()
+    }
 }
 
 
@@ -314,7 +326,7 @@ pub struct Point3<T: num_traits::Num + Clone + Copy> {
     z:T,
 }
 
-impl<T: num_traits::Num + Clone + Copy> Point3<T> {
+impl<T: num_traits::Num + Clone + Copy> Point3<T> where f64: From<T>  {
     pub fn new(x:T, y:T, z:T) -> Self {
         Point3 {x, y, z}
     }
@@ -369,6 +381,19 @@ impl<T: num_traits::Num + Clone + Copy> Point3<T> {
         let new_y = self.y / divisor;
         let new_z = self.z / divisor;
         Point3 {x:new_x, y:new_y, z:new_z}
+    }
+
+
+    pub fn distance(&self, p2:&Self) -> f64 {
+    //this is kinda stupid i think but idc
+    let x1:f64 = try_it!(self.x);
+    let y1:f64 = try_it!(self.y);
+    let z1:f64 = try_it!(self.z);
+    let x2:f64 = try_it!(p2.x);
+    let y2:f64 = try_it!(p2.y);
+    let z2:f64 = try_it!(p2.z);
+
+    ( (x2-x1).powi(2) + (y2-y1).powi(2) + (z2-z1).powi(2) ).sqrt()
     }
 }
 
