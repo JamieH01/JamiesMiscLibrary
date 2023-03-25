@@ -19,15 +19,27 @@
 
 
 #[macro_export] macro_rules! array2d {
-    ($width:tt , $height:tt , $type:ty , $default:tt) => {Array2d::<$type>::new($width, $height, $default, false)};
-    ($width:tt , $height:tt , $type:ty , $default:tt ? $write_lt:tt) => {Array2d::<$type>::new($width, $height, $default, $write_lt)};
-    ($width:tt , $height:tt ; $vector:tt) => {Array2d::new_from($width, $height, $vector, false)};
-    ($width:tt , $height:tt ; $vector:tt ? $write_lt:tt) => {Array2d::new_from($width, $height, $vector, $write_lt)};
+    ($width:expr , $height:expr , $type:ty , $default:tt) => {Array2d::<$type>::new($width, $height, $default, false)};
+    ($width:expr , $height:expr , $type:ty , $default:tt ? $write_lt:tt) => {Array2d::<$type>::new($width, $height, $default, $write_lt)};
+    ($width:expr , $height:expr ; $vector:tt) => {Array2d::new_from($width, $height, $vector, false)};
+    ($width:expr , $height:expr ; $vector:tt ? $write_lt:tt) => {Array2d::new_from($width, $height, $vector, $write_lt)};
 }
 //array2d!(width, height, type, default)
 //array2d!(width, height; vec<T>)
 //array2d!(width, height, type, default ? bool)
 //array2d!(width, height; vec<T> ? bool)
+
+
+
+#[macro_export] macro_rules! point {
+    ($x:tt, $y:tt) => {Point2::new($x, $y)};
+    ($x:tt, $y:tt, $z:tt) => {Point3::new($x, $y, $z)};
+}
+
+
+
+
+
 
 
 
@@ -43,6 +55,39 @@ pub fn from_u8_rgb(r: u8, g: u8, b: u8) -> u32 {
 pub fn distance(x1:&f64, y1:&f64, x2:&f64, y2:&f64) -> f64 {
 ((x2-x1).powi(2)+(y2-y1).powi(2)).sqrt()
 }
+
+
+pub fn dot_product_f64(multiplicand:Vec<f64>, multiplier:Vec<f64>) -> f64 {
+    if multiplicand.len() != multiplier.len() {panic!("incompatable tables: the multiplicand len is {} but the multiplier len is {}",multiplicand.len(),multiplier.len())}
+
+    let mut output:f64 = 0.0;
+
+    for i in 0..multiplicand.len() {
+        output += multiplicand[i] * multiplier[i]
+    }
+
+
+
+    output
+}
+
+//make this and more matrix stuff a part of the struct
+pub fn matrix_mul_f64(multiplicand:&Array2d<f64>, multiplier:&Array2d<f64>) -> Array2d<f64> {
+
+    if multiplicand.width != multiplier.height {panic!("incompatable tables: the width of the multiplicand is {} but the height of the multiplier is {}", multiplicand.width, multiplier.height)}
+
+    let mut output = array2d!(multiplier.width(), multiplicand.height(), f64, 0.0);
+
+    for i in 0..output.len() {
+        let pos = output.nth_to_pos(i);
+        let product = dot_product_f64(multiplicand.get_row(pos.1), multiplier.get_column(pos.0));
+        output.set_nth(i, product);
+    }
+
+    output
+}
+
+
 
 
 
@@ -206,37 +251,35 @@ impl<T: Clone> Array2d<T> {
 
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Point<T: num_traits::Num + Clone + Copy> {
+pub struct Point2<T: num_traits::Num + Clone + Copy> {
     x:T,
     y:T,
 }
 
-
-impl<T: num_traits::Num + Clone + Copy> Point<T> {
-    //const arithmetic
+impl<T: num_traits::Num + Clone + Copy> Point2<T> {
     pub fn new(x:T, y:T) -> Self {
-        Point {x, y}
+        Point2 {x, y}
     }
 
-    pub fn add(&self, addend:Point<T>) -> Self {
+    pub fn add(&self, addend:Point2<T>) -> Self {
         let new_x = self.x + addend.x;
         let new_y = self.y + addend.y;
-        Point {x:new_x, y:new_y}
+        Point2 {x:new_x, y:new_y}
     }
-    pub fn sub(&self, subtrahend:Point<T>) -> Self {
+    pub fn sub(&self, subtrahend:Point2<T>) -> Self {
         let new_x = self.x - subtrahend.x;
         let new_y = self.y - subtrahend.y;
-        Point {x:new_x, y:new_y}
+        Point2 {x:new_x, y:new_y}
     }
-    pub fn mul(&self, multiplier:Point<T>) -> Self {
+    pub fn mul(&self, multiplier:Point2<T>) -> Self {
         let new_x = self.x * multiplier.x;
         let new_y = self.y * multiplier.y;
-        Point {x:new_x, y:new_y}
+        Point2 {x:new_x, y:new_y}
     }
-    pub fn div(&self, divisor:Point<T>) -> Self {
+    pub fn div(&self, divisor:Point2<T>) -> Self {
         let new_x = self.x / divisor.x;
         let new_y = self.y / divisor.y;
-        Point {x:new_x, y:new_y}
+        Point2 {x:new_x, y:new_y}
     }
 
 
@@ -244,25 +287,100 @@ impl<T: num_traits::Num + Clone + Copy> Point<T> {
     pub fn const_add(&self, addend:T) -> Self {
         let new_x = self.x + addend;
         let new_y = self.y + addend;
-        Point {x:new_x, y:new_y}
+        Point2 {x:new_x, y:new_y}
     }
     pub fn const_sub(&self, subtrahend:T) -> Self {
         let new_x = self.x - subtrahend;
         let new_y = self.y - subtrahend;
-        Point {x:new_x, y:new_y}
+        Point2 {x:new_x, y:new_y}
     }
     pub fn const_mul(&self, multiplier:T) -> Self {
         let new_x = self.x * multiplier;
         let new_y = self.y * multiplier;
-        Point {x:new_x, y:new_y}
+        Point2 {x:new_x, y:new_y}
     }    
     pub fn const_div(&self, divisor:T) -> Self {
         let new_x = self.x / divisor;
         let new_y = self.y / divisor;
-        Point {x:new_x, y:new_y}
+        Point2 {x:new_x, y:new_y}
     }
 }
 
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Point3<T: num_traits::Num + Clone + Copy> {
+    x:T,
+    y:T,
+    z:T,
+}
+
+impl<T: num_traits::Num + Clone + Copy> Point3<T> {
+    pub fn new(x:T, y:T, z:T) -> Self {
+        Point3 {x, y, z}
+    }
+
+    pub fn add(&self, addend:Point3<T>) -> Self {
+        let new_x = self.x + addend.x;
+        let new_y = self.y + addend.y;
+        let new_z = self.z + addend.z;
+        Point3 {x:new_x, y:new_y, z:new_z}
+    }
+    pub fn sub(&self, subtrahend:Point3<T>) -> Self {
+        let new_x = self.x - subtrahend.x;
+        let new_y = self.y - subtrahend.y;
+        let new_z = self.z - subtrahend.z;
+        Point3 {x:new_x, y:new_y, z:new_z}
+    }
+    pub fn mul(&self, multiplier:Point3<T>) -> Self {
+        let new_x = self.x * multiplier.x;
+        let new_y = self.y * multiplier.y;
+        let new_z = self.z * multiplier.z;
+        Point3 {x:new_x, y:new_y, z:new_z}
+    }
+    pub fn div(&self, divisor:Point3<T>) -> Self {
+        let new_x = self.x / divisor.x;
+        let new_y = self.y / divisor.y;
+        let new_z = self.z / divisor.z;
+        Point3 {x:new_x, y:new_y, z:new_z}
+    }
+
+
+
+    pub fn const_add(&self, addend:T) -> Self {
+        let new_x = self.x + addend;
+        let new_y = self.y + addend;
+        let new_z = self.z + addend;
+        Point3 {x:new_x, y:new_y, z:new_z}
+    }
+    pub fn const_sub(&self, subtrahend:T) -> Self {
+        let new_x = self.x - subtrahend;
+        let new_y = self.y - subtrahend;
+        let new_z = self.z - subtrahend;
+        Point3 {x:new_x, y:new_y, z:new_z}
+    }
+    pub fn const_mul(&self, multiplier:T) -> Self {
+        let new_x = self.x * multiplier;
+        let new_y = self.y * multiplier;
+        let new_z = self.z * multiplier;
+        Point3 {x:new_x, y:new_y, z:new_z}
+    }    
+    pub fn const_div(&self, divisor:T) -> Self {
+        let new_x = self.x / divisor;
+        let new_y = self.y / divisor;
+        let new_z = self.z / divisor;
+        Point3 {x:new_x, y:new_y, z:new_z}
+    }
+}
+
+
+
+
+
+
+
+
+
+//ENUMS
 #[derive(Debug, Clone, Copy)]
 pub enum Color {
     Red = 16711680,

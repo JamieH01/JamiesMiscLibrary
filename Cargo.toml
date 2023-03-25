@@ -8,7 +8,7 @@ description = "A little library of miscellaneous thingamabobs for my personal us
 readme = "README.md"
 
 [lib]
-name = "JML"
+name = "jml"
 path = "src/lib.rs"
 
 [[test]]

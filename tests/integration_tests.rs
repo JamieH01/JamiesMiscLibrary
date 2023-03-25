@@ -1,7 +1,7 @@
 //#[cfg(test)]
 
 mod integration_tests {
-use rary::*;
+use jml::*;
 
     #[test]
     fn test_watch() {
@@ -28,10 +28,12 @@ use rary::*;
 
     #[test]
     fn test_point() {
-        let point1 = Point::<u32>::new(15, 12);
+        let point1 = Point2::<u32>::new(15, 12);
         let point2 = point1.const_add(4);
 
-        watch!(point1, point2);
+        let macro_point2 = point!(43, 25);
+        let macro_point3 = point!(23, 3, 10);
+        watch!(point1, point2, macro_point2, macro_point3);
     }
 
     #[test]
