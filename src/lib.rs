@@ -52,7 +52,7 @@ pub fn from_u8_rgb(r: u8, g: u8, b: u8) -> u32 {
 }
 
 
-pub fn distance(x1:&f64, y1:&f64, x2:&f64, y2:&f64) -> f64 {
+pub fn distance(x1:f64, y1:f64, x2:f64, y2:f64) -> f64 {
 ((x2-x1).powi(2)+(y2-y1).powi(2)).sqrt()
 }
 
@@ -72,7 +72,7 @@ pub fn dot_product_f64(multiplicand:Vec<f64>, multiplier:Vec<f64>) -> f64 {
 }
 
 //make this and more matrix stuff a part of the struct
-pub fn matrix_mul_f64(multiplicand:&Array2d<f64>, multiplier:&Array2d<f64>) -> Array2d<f64> {
+pub fn matrix_mul_f64(multiplicand:Array2d<f64>, multiplier:Array2d<f64>) -> Array2d<f64> {
 
     if multiplicand.width != multiplier.height {panic!("incompatable tables: the width of the multiplicand is {} but the height of the multiplier is {}", multiplicand.width, multiplier.height)}
 

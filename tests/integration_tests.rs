@@ -11,7 +11,7 @@ use jml::*;
     }
 
     #[test]
-    fn test_array2d_LT() {
+    fn test_array2d() {
         let table1 = Array2d::<u32>::new(500, 500, 15, false);
         println!("{:?} {:?}", table1.has_lt(), table1.nth_to_pos(8879));
 
@@ -24,6 +24,10 @@ use jml::*;
         let test_vector = vec![5; 100];
 
         let table3 = array2d!(10, 10; test_vector);
+
+        let mul_tableA = array2d!(50, 30, f64, 2.0);
+        let mul_tableB = array2d!(10, 50, f64, 3.0);
+        let matrix = matrix_mul_f64(mul_tableA, mul_tableB);
     }
 
     #[test]
@@ -41,5 +45,17 @@ use jml::*;
         let test_color = Color::Red.value();
         println!("{:?}", test_color);
 
+    }
+
+    #[test]
+    fn distance_test() {
+        let distance = distance(15.0, 29.0, 243.0, 44.0);
+    }
+
+    #[test]
+    fn dot_product_test() {
+        let vectorA = vec![2.0; 10];
+        let vectorB = vec![3.0; 10];
+        let product = dot_product_f64(vectorA, vectorB);
     }
 }
