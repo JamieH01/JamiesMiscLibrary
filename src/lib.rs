@@ -408,15 +408,15 @@ impl<T: num_traits::Num + Clone + Copy> Point3<T> where f64: From<T>  {
 //ENUMS
 #[derive(Debug, Clone, Copy)]
 pub enum Color {
-    Red = 16711680,
-    Green = 65280,
-    Blue = 255,
-    Yellow = 16776960,
-    Cyan = 65535,
+    Red     = 16711680,
+    Green   = 65280,
+    Blue    = 255,
+    Yellow  = 16776960,
+    Cyan    = 65535,
     Magenta = 16711935,
-    Orange = 16744448,
-    Blank = 0,
-    White = 16777215,
+    Orange  = 16744448,
+    Blank   = 0,
+    White   = 16777215,
 }
 
 impl Color {

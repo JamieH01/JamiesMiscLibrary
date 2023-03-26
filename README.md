@@ -162,4 +162,39 @@ table.len()
 table.has_lt()
 ```
 
-todo!();
+## Point2/3
+All of the methods are the same, just implemented for 2 or 3 dimensions.
+
+### basic arithmetic
+`add(), sub(), mul(),` and `div()` are available for basic arithmetic with other points. `distance()` is also there to make getting distances with points more straightforward.
+
+### const arithmetic
+`const_add(), const_sub(), const_mul()` and `const_div()` are available for applying a cosntant to every element of a point.
+```
+let p1 = point!(4, 5, 6);
+let p2 = p1.const_add(1);
+assert_eq!(p2, point!(5, 6, 7));
+```
+
+# Enums
+
+## Color
+A simple enum that holds some basic colors.
+available colors:
+```
+Red    
+Green  
+Blue   
+Yellow 
+Cyan   
+Magenta
+Orange 
+Blank  
+White  
+```
+
+### value
+Gets the u32 rgb value from the color it is called on.
+```
+let red = Color::Red.value();
+```

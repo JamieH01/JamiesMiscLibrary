@@ -38,6 +38,9 @@ use jml::*;
         let macro_point2 = point!(43, 25);
         let macro_point3 = point!(23, 3, 10);
         watch!(point1, point2, macro_point2, macro_point3);
+        let p1 = point!(4, 5, 6);
+        let p2 = p1.const_add(1);
+        assert_eq!(p2, point!(5, 6, 7));
     }
 
     #[test]
