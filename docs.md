@@ -14,6 +14,7 @@ Initializes an Array2d type. Read more on them in the 'Structs' section.
 Takes a width, height, and default value + type, along with an optional bool for whether a lookup-table should be written (generally should). Can also create an Array2d from a regular vector with a semicolon.
 
 ```
+//array2d!(width, height, type, default)
 let table_a = array2d!(50, 50, u32, 15);
 let table_b = array2d!(15, 10; vector ? true);
 ```
@@ -23,8 +24,18 @@ Initializes a Point2/3 type, depending on how many parameters are provided. Read
 Takes an x, y, and optional z value (that must be a number type).
 
 ```
+//point!(x, y, z)
 let 2d_point = point!(12, 5);
 let 3d_point = point!(25, 16, 8);
+```
+
+## vel!
+Initializes a Velocity type, taking either a `!` or a `?` to signify radians or degrees. Note that this is only for the *initialized* value, as the internal `dir` variable is simply in radians. Read more on them in the 'Structs' section.
+
+```
+//vel!(dir, mag)
+let rad_vel = vel!(? 0.3, 15); //radians
+let deg_vel = vel!(! 25, 8); //degrees
 ```
 
 ## try_it!
@@ -99,7 +110,7 @@ table.data[20] = value;
 ```
 
 ### set_pos
-Sets the value at a position.
+Sets the value at a position
 ```
 table.set_pos(32, 12, value);
 ```
@@ -143,7 +154,7 @@ let data = table.pop_data() //<- table is freed
 ### is_bounded
 Checks if x and y values are within the dimensions of the table to avoid width under/overflows, by indexing values out of bounds
 ```
-if table.is_bounded(15,4) {todo()!}
+if table.is_bounded(15, 4) {todo()!}
 ```
 
 ### properties
@@ -167,6 +178,24 @@ All of the methods are the same, just implemented for 2 or 3 dimensions.
 let p1 = point!(4, 5, 6);
 let p2 = p1.const_add(1);
 assert_eq!(p2, point!(5, 6, 7));
+```
+
+### as_velocity
+Only available on Point2. Converts a cartesian coordinate to a vector coordinate (returning a `Velocity` type), assuming the tail is at the origin.
+```
+let vector = point.as_velocity();
+```
+
+## Velocity
+A 2 dimensional vector with direction and magnitude.
+
+### basic arithmetic
+`add(), sub(), mul(),` and `div()` are available for basic arithmetic with other Velocities.
+
+### as_point
+Converts a vector coordinate to a cartesian coordinate (returning a `Point2` type).
+```
+let point = vector.as_point();
 ```
 
 # Enums

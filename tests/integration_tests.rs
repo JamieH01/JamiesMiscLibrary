@@ -12,7 +12,7 @@ use jml::*;
 
     #[test]
     fn test_array2d() {
-        let mut table1 = Array2d::<u32>::new(500, 500, 15, false);
+        let table1 = Array2d::<u32>::new(500, 500, 15, false);
         println!("{:?} {:?}", table1.has_lt(), table1.nth(8879));
 
         let table2 = Array2d::<u32>::new(500, 500, 15, true);
@@ -70,5 +70,16 @@ use jml::*;
     fn try_it_test() {
         let int:u32 = 15;
         let usize_int:usize = try_it!(int);
+    }
+
+    #[test]
+    fn velocity_test() {
+        let vector = vel!(! 15.0, 5.0);
+        let point = point!(5, 1);
+
+        let vector_point = vector.as_point();
+        let point_vector = point.as_velocity();
+
+        watch!(vector, point, vector_point, point_vector);
     }
 }

@@ -32,8 +32,8 @@
 
 
 #[macro_export] macro_rules! point {
-    ($x:tt, $y:tt) => {Point2::new($x, $y)};
-    ($x:tt, $y:tt, $z:tt) => {Point3::new($x, $y, $z)};
+    ($x:expr, $y:expr) => {Point2::new($x, $y)};
+    ($x:expr, $y:expr, $z:expr) => {Point3::new($x, $y, $z)};
 }
 
 
@@ -41,6 +41,12 @@
     ($expr:expr) => {$expr.try_into().unwrap()}
 }
 
+
+#[macro_export] macro_rules! vel {
+    (! $dir:expr, $mag:expr) => {Velocity::new( ($dir as f64).to_radians(), $mag)}; //degrees
+    (? $dir:expr, $mag:expr) => {Velocity::new($dir, $mag)}; //radians
+
+}
 
 
 
@@ -321,6 +327,17 @@ impl<T:num_traits::Num +  Clone + Copy> Point2<T> where f64: From<T> {
 
     ( (x2-x1).powi(2) + (y2-y1).powi(2) ).sqrt()
     }
+
+    pub fn as_velocity(&self) -> Velocity {
+        let fx:f64 = try_it!(self.x);
+        let fy:f64 = try_it!(self.y);
+
+        let mag = ( fx.powi(2) + fy.powi(2) ).sqrt();
+        let dir = fy.atan2(fx);
+
+        Velocity {mag, dir}
+    }
+
 }
 
 
@@ -402,12 +419,44 @@ impl<T: num_traits::Num + Clone + Copy> Point3<T> where f64: From<T>  {
     }
 }
 
-
-struct DirVector {
-    pub direction:f64,
-    pub magnitude:f64,
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Velocity {
+    pub dir:f64,
+    pub mag:f64,
 }
 
+impl Velocity {
+    pub fn new(dir:f64, mag:f64) -> Self { Velocity {dir, mag} }
+
+    pub fn as_point(&self) -> Point2<f64> {
+        point!(
+        self.mag * self.dir.cos(),
+        self.mag * self.dir.sin()
+        )
+    }
+
+
+    pub fn add(&self, addend:Velocity) -> Self {
+        let new_dir = self.dir + addend.dir;
+        let new_mag = self.mag + addend.mag;
+        Velocity {dir:new_dir, mag:new_mag}
+    }
+    pub fn sub(&self, subtrahend:Velocity) -> Self {
+        let new_dir = self.dir - subtrahend.dir;
+        let new_mag = self.mag - subtrahend.mag;
+        Velocity {dir:new_dir, mag:new_mag}
+    }
+    pub fn mul(&self, multiplier:Velocity) -> Self {
+        let new_dir = self.dir * multiplier.dir;
+        let new_mag = self.mag * multiplier.mag;
+        Velocity {dir:new_dir, mag:new_mag}
+    }
+    pub fn div(&self, divisor:Velocity) -> Self {
+        let new_dir = self.dir / divisor.dir;
+        let new_mag = self.mag / divisor.mag;
+        Velocity {dir:new_dir, mag:new_mag}
+    }
+}
 
 
 
