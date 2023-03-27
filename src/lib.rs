@@ -248,6 +248,11 @@ impl<T: Clone> Array2d<T> {
     pub fn pop_data(self) -> Vec<T> {
         self.data
     }
+
+
+    pub fn is_bounded(&self, x:usize, y:usize) -> bool {
+        if x < self.width && y < self.height {return true}else{return false}
+    }
 }
 
 
@@ -398,7 +403,10 @@ impl<T: num_traits::Num + Clone + Copy> Point3<T> where f64: From<T>  {
 }
 
 
-
+struct DirVector {
+    pub direction:f64,
+    pub magnitude:f64,
+}
 
 
 
