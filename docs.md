@@ -11,12 +11,12 @@ watch!("Variable A":var_a);
 
 ## array2d!
 Initializes an Array2d type. Read more on them in the 'Structs' section.
-Takes a width, height, and default value + type, along with an optional bool for whether a lookup-table should be written (generally should). Can also create an Array2d from a regular vector with a semicolon.
+Takes a width, height, and default value + type. Can also create an Array2d from a regular vector with a semicolon.
 
 ```
 //array2d!(width, height, type, default)
 let table_a = array2d!(50, 50, u32, 15);
-let table_b = array2d!(15, 10; vector ? true);
+let table_b = array2d!(15, 10; vector);
 ```
 
 ## point!
@@ -116,7 +116,7 @@ table.set_pos(32, 12, value);
 ```
 
 ### nth_to_pos
-Converts an index to its corresponding position. This is optomized by having a lookup table.
+Converts an index to its corresponding position.
 ```
 let position:(usize, usize) = table.nth_to_pos(15);
 ```
@@ -163,7 +163,6 @@ These are the available read-only properties you can get from a table:
 table.width()
 table.height()
 table.len()
-table.has_lt()
 ```
 
 ## Point2/3

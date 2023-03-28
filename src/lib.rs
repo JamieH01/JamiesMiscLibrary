@@ -19,10 +19,8 @@
 
 
 #[macro_export] macro_rules! array2d {
-    ($width:expr , $height:expr , $type:ty , $default:tt) => {Array2d::<$type>::new($width, $height, $default, false)};
-    ($width:expr , $height:expr , $type:ty , $default:tt ? $write_lt:tt) => {Array2d::<$type>::new($width, $height, $default, $write_lt)};
-    ($width:expr , $height:expr ; $vector:tt) => {Array2d::new_from($width, $height, $vector, false)};
-    ($width:expr , $height:expr ; $vector:tt ? $write_lt:tt) => {Array2d::new_from($width, $height, $vector, $write_lt)};
+    ($width:expr , $height:expr , $type:ty , $default:tt) => {Array2d::<$type>::new($width, $height, $default)};
+    ($width:expr , $height:expr ; $vector:tt) => {Array2d::new_from($width, $height, $vector)};
 }
 //array2d!(width, height, type, default)
 //array2d!(width, height; vec<T>)
@@ -112,41 +110,22 @@ pub struct Array2d<T> {
     width:usize,
     height:usize,
     length:usize,
-
-    has_lt:bool,
-    lookup_table:Vec<(usize, usize)>,
 }
 
 
 impl<T: Clone> Array2d<T> {
-    pub fn new(width:usize, height:usize, default: T, should_write_lt:bool) -> Self /*where T: Clone*/{
+    pub fn new(width:usize, height:usize, default: T) -> Self /*where T: Clone*/{
         let length = width * height;
         let data = vec![default; length];
-        
-        let mut lookup_table:Vec<(usize, usize)> = vec![];
-        
-        if should_write_lt {
-            for i in 0..length {
-                lookup_table.push((i % width, i / width));
-            }
-        }
 
-        Array2d {data, width, height, length, lookup_table, has_lt:should_write_lt}
+        Array2d {data, width, height, length}
     }
 
-    pub fn new_from(width:usize, height:usize, data:Vec<T>, should_write_lt:bool) -> Self {
+    pub fn new_from(width:usize, height:usize, data:Vec<T>) -> Self {
         let length = width * height;
         if data.len() != length {panic!("incorrect sizes: the vector length is {} but the dimension length is {} ({} x {})",data.len(), length, width, height)}
         
-        let mut lookup_table:Vec<(usize, usize)> = vec![];   
-
-        if should_write_lt {
-            for i in 0..length {
-                lookup_table.push((i % width, i / width));
-            }
-        }
-
-        Array2d {data, width, height, length, lookup_table, has_lt:should_write_lt}
+        Array2d {data, width, height, length}
     }
 
     //core functions
@@ -200,18 +179,12 @@ impl<T: Clone> Array2d<T> {
         self.length.clone()
     }
 
-    pub fn has_lt(&self) -> bool {
-        self.has_lt.clone()
-    }
 
 
     //misc functions
     pub fn nth_to_pos(&self, i:usize) -> (usize, usize) {
-        if self.has_lt {
-            self.lookup_table[i].clone()
-        }else{
+        
         (i % self.width,i / self.width)
-        }
 
     }
 

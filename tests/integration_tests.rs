@@ -12,14 +12,14 @@ use jml::*;
 
     #[test]
     fn test_array2d() {
-        let table1 = Array2d::<u32>::new(500, 500, 15, false);
-        println!("{:?} {:?}", table1.has_lt(), table1.nth(8879));
+        let table1 = Array2d::<u32>::new(500, 500, 15);
+        println!("{:?}", table1.nth(8879));
 
-        let table2 = Array2d::<u32>::new(500, 500, 15, true);
-        println!("{:?}  {:?}", table2.has_lt(), table2.nth_to_pos(8879));
+        let table2 = Array2d::<u32>::new(500, 500, 15);
+        println!("{:?}", table2.nth_to_pos(8879));
 
         let table3 = array2d!(300, 400, u32, 15);
-        let table4 = array2d!(300, 400, f64, 45.33 ? true);
+        let table4 = array2d!(300, 400, f64, 45.33);
 
         let test_vector = vec![5; 100];
 
