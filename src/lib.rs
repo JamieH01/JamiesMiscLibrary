@@ -445,7 +445,8 @@ pub enum Color {
     Cyan    = 65535,
     Magenta = 16711935,
     Orange  = 16744448,
-    Blank   = 0,
+    Black   = 0,
+    Grey    = 4934475,
     White   = 16777215,
 }
 
