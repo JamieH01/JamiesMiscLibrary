@@ -1,3 +1,5 @@
+use minifb::*;
+
 //MACROS
 #[allow(unused_macros)]
 #[macro_export] macro_rules! watch {
@@ -46,6 +48,17 @@
 
 }
 
+#[macro_export] macro_rules! keys {
+    ($state:tt, {$($key:pat => $code:block),*}) => {
+        let keys: Vec<Keycode> = $state.get_keys();
+        for key in keys.iter() {   
+            match key {
+                $($key => {$code}),*,
+            }
+        }
+
+    };
+}
 
 
 
@@ -432,6 +445,29 @@ impl Velocity {
 }
 
 
+pub struct WindowContainer {
+    pub buffer:Array2d<u32>,
+    pub window:Window,
+    
+    //properties
+    pub width:usize,
+    pub height:usize,
+    pub bg_color:u32,
+}
+
+impl WindowContainer {
+    pub fn new(width:usize, height:usize, name:&str, bg_color:u32) -> Self {
+        let buffer = array2d!(width, height, u32, bg_color);
+        let window = Window::new(name, width, height, WindowOptions::default()).unwrap();
+
+        WindowContainer {buffer, window, width, height, bg_color}
+    }
+
+    pub fn update(&mut self) {
+        self.window.update_with_buffer(&self.buffer.data, self.width, self.height).unwrap();
+    }
+
+}
 
 
 

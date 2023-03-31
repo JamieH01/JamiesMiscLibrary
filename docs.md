@@ -46,6 +46,20 @@ let int:u32 = 15;
 let usize_int:usize = try_it!(int);
 ```
 
+## keys!
+Minimizes the boilerplate of matching held keys using the `device_query` crate. This macro will not work without it.
+
+```
+use device_query::{DeviceQuery, DeviceState, Keycode};
+
+let device_state = DeviceState::new();
+
+keys!(device_state, {
+    Keycode::Escape => {return}, 
+    _ => {break}
+});
+```
+
 # Functions
 
 ## from_u8_rgb
@@ -196,6 +210,25 @@ Converts a vector coordinate to a cartesian coordinate (returning a `Point2` typ
 ```
 let point = vector.as_point();
 ```
+
+## WindowContainer
+A holder for `minifb` windows to make managing them simpler. The internal `buffer` is the pixel buffer used by the window. You can modify this Array2d directly. 
+
+### new
+Creates a new window. Takes width, height, name, and background color.
+```
+let mut window = WindowContainer::new(1000, 1000, "Name", Color::Grey.value());
+```
+
+### update
+updates the window with whatever data is in the buffer. Usually should be called at the end of a loop. (Note that this code has no way of terminating)
+```
+loop {
+    window.update();
+}
+```
+
+
 
 # Enums
 
