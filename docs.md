@@ -98,7 +98,7 @@ let matrix = matrix_mul_f64(mul_tableA, mul_tableB);
 # Structs
 
 ## Array2d
-Probably the most useful thing here. An Array2d is a vector with width and height fields, allowing it to be indexed as both a 1 and 2 dimensional table. it also has an optional position lookup table to make converting from an index to a position faster, with the downside of an initial hitch when initializing. I generally recommend you set it on.
+Probably the most useful thing here. An Array2d is a vector with width and height fields, allowing it to be indexed as both a 1 and 2 dimensional table.
 
 ### new / new_from
 Creates a new table from either a default value or existing vector. Dont worry about these, use the macro `array2d!`.
@@ -124,7 +124,7 @@ table.data[20] = value;
 ```
 
 ### set_pos
-Sets the value at a position
+Sets the value at a position.
 ```
 table.set_pos(32, 12, value);
 ```
