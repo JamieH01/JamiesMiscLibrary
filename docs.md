@@ -243,7 +243,8 @@ Yellow
 Cyan   
 Magenta
 Orange 
-Blank  
+Black
+Grey
 White  
 ```
 
