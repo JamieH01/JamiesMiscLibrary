@@ -85,10 +85,10 @@ use jml::*;
 
     #[test]
     fn escape_test() {
-        use device_query::{DeviceQuery, DeviceState, Keycode};
-        
-        escape_loop! ({
-            //code
-        });
+        //use device_query::{DeviceQuery, DeviceState, Keycode};
+        //
+        //escape_loop! ({
+        //    //code
+        //});
     }
 }

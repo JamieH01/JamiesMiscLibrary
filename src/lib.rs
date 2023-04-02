@@ -158,13 +158,13 @@ impl<T: Clone> Array2d<T> {
     
     }
 
-    pub fn pos(&self, x:usize, y:usize) -> T {
+    pub fn pos(&self, pos:(usize, usize)) -> T {
         
-        if x >= self.width {panic!("index out of bounds: the width is {} but x is {}",self.width, x)}
-        if y >= self.height {panic!("index out of bounds: the height is {} but y is {}",self.height, y)}
+        if pos.0 >= self.width {panic!("index out of bounds: the width is {} but x is {}",self.width, pos.0)}
+        if pos.1 >= self.height {panic!("index out of bounds: the height is {} but y is {}",self.height, pos.1)}
 
 
-        let i = (y * self.width) + x;           
+        let i = (pos.1 * self.width) + pos.0;           
     
         self.data[i].clone()
     
@@ -177,12 +177,12 @@ impl<T: Clone> Array2d<T> {
 
     }
 
-    pub fn set_pos(&mut self, x:usize, y:usize, value:T) {
+    pub fn set_pos(&mut self, pos:(usize, usize), value:T) {
 
-        if x >= self.width {panic!("index out of bounds: the width is {} but x is {}",self.width, x)}
-        if y >= self.height {panic!("index out of bounds: the height is {} but y is {}",self.height, y)}
+        if pos.0 >= self.width {panic!("index out of bounds: the width is {} but x is {}",self.width, pos.0)}
+        if pos.1 >= self.height {panic!("index out of bounds: the height is {} but y is {}",self.height, pos.1)}
 
-        let i = (y * self.width) + x;
+        let i = (pos.1 * self.width) + pos.0;
         
         self.data[i] = value;
 
@@ -211,9 +211,9 @@ impl<T: Clone> Array2d<T> {
 
     }
 
-    pub fn pos_to_nth(&self, x:usize, y:usize) -> usize {
+    pub fn pos_to_nth(&self, pos:(usize, usize)) -> usize {
 
-        (y * self.width) + x
+        (pos.1 * self.width) + pos.0
         
     }
 
@@ -229,7 +229,7 @@ impl<T: Clone> Array2d<T> {
         let mut output:Vec<T> = vec![];
 
         for i in 0..self.width {
-            output.push(self.pos(i, row))
+            output.push(self.pos((i, row)))
         }
     
         output
@@ -240,7 +240,7 @@ impl<T: Clone> Array2d<T> {
         let mut output:Vec<T> = vec![];
 
         for i in 0..self.height {
-            output.push(self.pos(column, i))
+            output.push(self.pos((column, i)))
         }
     
         output
