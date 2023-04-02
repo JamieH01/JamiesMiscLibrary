@@ -60,6 +60,17 @@ keys!(device_state, {
 });
 ```
 
+## escape_loop!
+A regular loop thats escapable by pressing `Esc` to avoid forgetting to make sure your program can actually terminate.
+```
+use device_query::{DeviceQuery, DeviceState, Keycode};
+
+escape_loop! ({
+    //code
+    //pressing Esc will return from main()
+});
+```
+
 # Functions
 
 ## from_u8_rgb

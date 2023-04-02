@@ -82,4 +82,13 @@ use jml::*;
 
         watch!(vector, point, vector_point, point_vector);
     }
+
+    #[test]
+    fn escape_test() {
+        use device_query::{DeviceQuery, DeviceState, Keycode};
+        
+        escape_loop! ({
+            //code
+        });
+    }
 }

@@ -60,7 +60,17 @@ use minifb::*;
     };
 }
 
-
+#[macro_export] macro_rules! escape_loop {
+    ($body:block) => {
+        let device_state = DeviceState::new();
+        
+        loop {
+            keys!(device_state, {
+                Keycode::Escape => {return},
+                _ => {break}
+            });$body}
+    }
+}
 
 //FUNCTIONS
 
